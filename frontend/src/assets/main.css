@@ -1,0 +1,97 @@
+/* ========================================
+   NAVIOO - Variables globales de diseño
+   Colores extraídos de las interfaces originales
+   ======================================== */
+:root {
+  --color-primary: #18caa9;        /* verde turquesa */
+  --color-primary-light: #23bfcb;  /* cyan, cierre de gradiente en botones */
+  --color-accent: #f4d356;         /* amarillo */
+  --color-navy: #264653;           /* azul marino, texto principal */
+  --color-bg-soft: #e2f8f4;        /* fondo suave / hover */
+  --color-white: #ffffff;
+  --color-gray-text: #6b7b80;
+
+  --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+
+  --font-main: 'Poppins', 'Segoe UI', sans-serif;
+
+  --radius-pill: 999px;
+  --radius-md: 12px;
+
+  --shadow-sm: 0 2px 8px rgba(38, 70, 83, 0.08);
+  --shadow-md: 0 6px 20px rgba(38, 70, 83, 0.12);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--color-navy);
+  background-color: var(--color-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Contenedor reutilizable para centrar contenido */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Botón pill reutilizable (estilo de las interfaces originales) */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: var(--color-white);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: var(--color-navy);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
