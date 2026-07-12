@@ -14,8 +14,8 @@
           y experiencia del usuario para empresas de transporte público.
         </p>
         <div class="hero-actions">
-          <RouterLink to="/login" class="btn btn-primary">
-            Comenzar ahora
+          <RouterLink to="/register" class="btn btn-primary">
+            Registrate ahora
           </RouterLink>
           <a href="#funcionalidades" class="btn btn-outline">
             Conocer más
@@ -70,6 +70,21 @@
       <div class="container">
         <h2>Contacto</h2>
         <p>¿Tienes dudas? Escríbenos a contacto@navioo.com</p>
+        <form class="contact-form">
+          <input type="text" placeholder="Nombre" required />
+          <input type="email" placeholder="Correo electrónico" required />
+          <textarea placeholder="Mensaje" required></textarea>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>¿Listo para comenzar?</h2>
+        <RouterLink to="/register" class="btn btn-primary">
+          Registrate ahora
+        </RouterLink>
       </div>
     </section>
 
@@ -188,4 +203,74 @@ const currentYear = new Date().getFullYear()
   text-align: center;
   font-size: 0.9rem;
 }
+
+.cta {
+  background: linear-gradient(180deg, var(--color-white) 0%, var(--color-bg-soft) 100%);
+  padding: 3rem 0;
+  text-align: center;
+}
+.cta h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-navy);
+}
+.cta h2:hover {
+  color: var(--color-primary);
+  transition: color 0.15s ease;
+}
+.cta .btn {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+.features {
+    position: relative;        /* necesario para que el overlay se posicione dentro de esta sección */
+  padding: 4rem 0;
+  background-image: url('../assets/images/1.jpg');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;          /* evita que el overlay se salga de la sección */
+}
+.features::before {
+  content: '';
+  position: absolute;
+  inset: 0;                  /* equivale a top:0; right:0; bottom:0; left:0; */
+  background-color: rgba(255, 255, 255, 0.5); /* ajusta opacidad a gusto */
+  z-index: 1;
+}
+.features .container {
+  position: relative;
+  z-index: 2;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
+  color: var(--color-navy);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+.contact-form input,
+.contact-form textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--color-navy);
+  border-radius: 10px;
+  font-size: 1rem;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 255, 200, 0.25);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
 </style>

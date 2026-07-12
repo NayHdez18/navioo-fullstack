@@ -32,15 +32,15 @@ import logo from '../../assets/images/NAVIO.svg'
   background-color: var(--color-white);
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 20;
 }
 
 .navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 
 .brand {
@@ -50,7 +50,7 @@ import logo from '../../assets/images/NAVIO.svg'
 }
 
 .brand-icon {
-  height: 80px;
+  height: 110px;
   width: auto;
 }
 
