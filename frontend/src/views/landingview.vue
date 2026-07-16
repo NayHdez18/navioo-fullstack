@@ -14,7 +14,7 @@
           y experiencia del usuario para empresas de transporte público.
         </p>
         <div class="hero-actions">
-          <RouterLink to="/register" class="btn btn-primary">
+          <RouterLink to="/registerview" class="btn btn-primary">
             Registrate ahora
           </RouterLink>
           <a href="#funcionalidades" class="btn btn-outline">
@@ -82,7 +82,7 @@
     <section class="cta">
       <div class="container">
         <h2>¿Listo para comenzar?</h2>
-        <RouterLink to="/register" class="btn btn-primary">
+        <RouterLink to="/registerview" class="btn btn-primary">
           Registrate ahora
         </RouterLink>
       </div>

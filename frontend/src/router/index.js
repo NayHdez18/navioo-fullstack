@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LandingView from '../views/landingview.vue'
 import LoginView from '../views/loginview.vue'
 import HomeView from '../views/homeview.vue'
+import RegisterView from '../views/registerview.vue'
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     component: HomeView,
     meta: { requiresAuth: true }, // solo accesible si hay sesión activa
   },
+  {
+    path: '/registerview',
+    name: 'registerview',
+    component: RegisterView,
+  }
 ]
 
 const router = createRouter({
