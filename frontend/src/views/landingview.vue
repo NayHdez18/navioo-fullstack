@@ -29,23 +29,21 @@
       <div class="container">
         <h2>Todo lo que tu empresa necesita</h2>
         <div class="features-grid">
-          <article class="feature-card">
-            <span class="feature-icon">⏱️</span>
-            <h3>Gestión de tiempo</h3>
+          <article class="feature-card"><Clock class="feature-icon" :size="32" /> 
             <p>Control de rutas, horarios y tiempos de recorrido en tiempo real.</p>
           </article>
           <article class="feature-card">
-            <span class="feature-icon">✅</span>
+            <CheckCircle2 class="feature-icon" :size="32" />
             <h3>Calidad de servicio</h3>
             <p>Monitoreo y métricas para asegurar un servicio consistente.</p>
           </article>
           <article class="feature-card">
-            <span class="feature-icon">🗂️</span>
+            <FolderKanban class="feature-icon" :size="32" />
             <h3>Área administrativa</h3>
             <p>Gestión de personal, unidades y documentación en un solo lugar.</p>
           </article>
           <article class="feature-card">
-            <span class="feature-icon">😊</span>
+            <Smile class="feature-icon" :size="32" />
             <h3>Experiencia del usuario</h3>
             <p>Una app pensada para empresas, trabajadores y usuarios finales.</p>
           </article>
@@ -100,6 +98,9 @@
 import NavBar from '../components/layout/navbar.vue'
 
 const currentYear = new Date().getFullYear()
+
+import { Clock, CheckCircle2, FolderKanban, Smile } from 'lucide-vue-next'
+
 </script>
 
 <style scoped>
@@ -166,6 +167,9 @@ const currentYear = new Date().getFullYear()
   text-align: center;
   box-shadow: var(--shadow-sm);
   transition: transform 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .feature-card:hover {
@@ -173,9 +177,9 @@ const currentYear = new Date().getFullYear()
 }
 
 .feature-icon {
-  font-size: 2rem;
-  display: block;
+  color: var(--color-primary);  /* antes probablemente no tenías esto */
   margin-bottom: 0.75rem;
+
 }
 
 .feature-card h3 {
@@ -271,6 +275,15 @@ const currentYear = new Date().getFullYear()
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(0, 255, 200, 0.25);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+section.features h2 {
+  background-color: var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  width: 50%;
+  margin: 0 auto 2rem auto;
+
 }
 
 </style>

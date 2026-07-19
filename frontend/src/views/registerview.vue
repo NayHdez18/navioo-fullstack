@@ -1,7 +1,9 @@
 <template>
   <div class="register-view">
     <div class="register-left">
-      <RouterLink to="/" class="back-btn" aria-label="Volver">←</RouterLink>
+      <RouterLink to="/" class="back-btn" aria-label="Volver">
+        <ArrowLeft />
+      </RouterLink>
 
       <div class="register-content">
         <div class="logo-wrap">
@@ -41,7 +43,8 @@
                 @click="showPassword = !showPassword"
                 :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
               >
-                {{ showPassword ? '🙈' : '👁️' }}
+                 <Eye v-if="showPassword" :size="18" />
+                <EyeOff v-else :size="18" />
               </button>
             </div>
           </label>
@@ -58,6 +61,7 @@
 
     <!-- Columna derecha: imagen -->
     <div class="register-right"></div>
+    <img src="../assets/images/2.jpg" alt="Imagen de registro" class="register-bg" />
   </div>
 </template>
 
@@ -77,22 +81,38 @@ function handleSubmit() {
   // Aquí luego conectamos con services/api.js (axios) para el registro real
   console.log('Formulario de registro:', form.value)
 }
+
+import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
+
 </script>
 
 <style scoped>
 .register-view {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.register-right {
+  flex: 0 0 50%;
+  max-width: 50%;
+  background-image: url('../assets/images/register-bg.jpg');
+  background-size: cover;
+  background-position:center;
+
 }
 
 /* ---- Columna izquierda ---- */
 .register-left {
-  flex: 1;
+  flex: 0 0 50%;
+  max-width: 50%;
+  box-sizing: border-box;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .back-btn {
@@ -109,6 +129,12 @@ function handleSubmit() {
   justify-content: center;
   font-size: 1.2rem;
   box-shadow: var(--shadow-sm);
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;;
+}
+.back-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-navy);
+  transform: scale(1.05);
 }
 
 .register-content {
@@ -119,6 +145,8 @@ function handleSubmit() {
 .logo-wrap {
   text-align: center;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .register-logo {
@@ -186,7 +214,10 @@ h1 {
   top: 50%;
   transform: translateY(-50%);
   background: none;
-  font-size: 1rem;
+  color: var(--color-gray-text);
+  display: flex;
+  align-items: center;
+
 }
 
 .register-form .btn {
