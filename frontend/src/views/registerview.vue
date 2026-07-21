@@ -1,7 +1,7 @@
 <template>
   <div class="register-view">
     <div class="register-left">
-      <RouterLink to="/" class="back-btn" aria-label="Volver">
+      <RouterLink to="/profile" class="back-btn" aria-label="Volver">
         <ArrowLeft />
       </RouterLink>
 
@@ -11,7 +11,7 @@
           <span class="logo-subtitle">Workplace</span>
         </div>
 
-        <h1>Crear una cuenta</h1>
+        <h1>Registro como {{ route.params.role }}</h1>
 
         <form class="register-form" @submit.prevent="handleSubmit">
           <label>
@@ -67,6 +67,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+console.log(route.params.role) // Muestra el valor del parámetro 'role' en la consola
+
 
 const showPassword = ref(false)
 

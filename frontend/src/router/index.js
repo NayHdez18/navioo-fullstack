@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LandingView from '../views/landingview.vue'
 import LoginView from '../views/loginview.vue'
 import HomeView from '../views/homeview.vue'
+import profileSelectView from '../views/profileselectview.vue'
 import RegisterView from '../views/registerview.vue'
+
 
 const routes = [
   {
@@ -22,9 +24,14 @@ const routes = [
     meta: { requiresAuth: true }, // solo accesible si hay sesión activa
   },
   {
-    path: '/registerview',
-    name: 'registerview',
+    path: '/register/:role',
+    name: 'register',
     component: RegisterView,
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: profileSelectView,
   }
 ]
 

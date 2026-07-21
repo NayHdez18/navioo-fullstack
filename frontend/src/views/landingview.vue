@@ -14,7 +14,7 @@
           y experiencia del usuario para empresas de transporte público.
         </p>
         <div class="hero-actions">
-          <RouterLink to="/registerview" class="btn btn-primary">
+          <RouterLink to="/profile" class="btn btn-primary">
             Registrate ahora
           </RouterLink>
           <a href="#funcionalidades" class="btn btn-outline">
@@ -30,6 +30,7 @@
         <h2>Todo lo que tu empresa necesita</h2>
         <div class="features-grid">
           <article class="feature-card"><Clock class="feature-icon" :size="32" /> 
+            <h3>Control de rutas y horarios</h3>
             <p>Control de rutas, horarios y tiempos de recorrido en tiempo real.</p>
           </article>
           <article class="feature-card">
@@ -80,7 +81,7 @@
     <section class="cta">
       <div class="container">
         <h2>¿Listo para comenzar?</h2>
-        <RouterLink to="/registerview" class="btn btn-primary">
+        <RouterLink to="/profile" class="btn btn-primary">
           Registrate ahora
         </RouterLink>
       </div>

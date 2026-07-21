@@ -49,7 +49,7 @@
 
         <p class="register-hint">
           ¿No tienes cuenta?
-          <RouterLink to="/registerview">Regístrate aquí</RouterLink>
+          <RouterLink to="/profile">Regístrate aquí</RouterLink>
         </p>
       </div>
     </div>
