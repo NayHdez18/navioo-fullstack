@@ -1,7 +1,7 @@
 const Usuario = require ('../models/usuarios');
 const Ruta = require ('../models/rutasviaje');
 const asyncHandler = require('express-async-handler');
-const { compileStyleAsync } = require('vue/compiler-sfc');
+
 
 const getUsuarios = asyncHandler(async(req, res) =>{
     const usuarios = await Usuario.find();
@@ -11,7 +11,7 @@ const getRutas = asyncHandler(async(req, res) =>{
     const rutas = await Ruta.find();
     res.status(200).json(rutas);
 });
-
+{}
 const crearusuario = asyncHandler (async(req, res) =>{
 
     const {name, lastname, phone, email, password, designation}=req.body;
@@ -105,3 +105,7 @@ const deleteruta = asyncHandler(async(req, res) =>{
     
     res.status(200).json({message: `Eliminar ruta de: ${req.params.id}`});
 });
+
+
+
+module.exports = { crearRuta, crearusuario, getRuta, getRutas, getUsuario, getUsuarios, deleteruta, deleteusuario, uptdateruta, uptdateusuario }
