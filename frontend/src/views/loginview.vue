@@ -58,8 +58,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
 
+const router = useRouter()
 const showPassword = ref(false)
 
 const form = ref({
@@ -70,6 +72,7 @@ const form = ref({
 function handleSubmit() {
   // Aquí luego conectamos con services/api.js (axios) para el login real
   console.log('Formulario de login:', form.value)
+  router.push('/home')
 }
 </script>
 

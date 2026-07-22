@@ -37,7 +37,7 @@ const router = createRouter({
 // Por ahora isLoggedIn es un placeholder fijo en false;
 // cuando armemos stores/auth.js lo conectamos al estado real.
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = false
+  const isLoggedIn = true
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     next({ name: 'login' })
