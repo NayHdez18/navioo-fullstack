@@ -4,7 +4,9 @@ const asyncHandler = require('express-async-handler');
 
 
 const getUsuarios = asyncHandler(async(req, res) =>{
-    const usuarios = await Usuario.find();
+    const {designation}=req.query;
+    const usuariofiltro = designation ? {designation: designation}: {};
+    const usuarios = await Usuario.find(usuariofiltro);
     res.status(200).json(usuarios);
 });
 const getRutas = asyncHandler(async(req, res) =>{
