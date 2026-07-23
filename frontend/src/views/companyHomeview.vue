@@ -1,8 +1,8 @@
 <template>
   <div class="company-layout">
-    <!-- Sidebar / Barra Lateral -->
+    <!-- SIDEBAR / BARRA LATERAL -->
     <aside class="sidebar">
-      <!-- LOGO CENTRADO (Oculto en vista chófer para dar lugar al botón verde si se prefiere, o visible arriba) -->
+      <!-- LOGO CENTRADO (Oculto en vista chófer) -->
       <div v-if="viewMode !== 'chofer'" class="brand">
         <img src="../assets/images/NAVIO.svg" alt="Navioo" class="sidebar-logo" />
         <span class="workplace-text">Workplace</span>
@@ -33,7 +33,7 @@
         </button>
       </nav>
 
-      <!-- VISTA 2: Panel de "Sus Rutas" (Cuadrícula Amarilla) -->
+      <!-- VISTA 2: Panel de "Sus Rutas" -->
       <div v-else-if="viewMode === 'rutas'" class="rutas-panel">
         <button class="back-circle-btn yellow" @click="viewMode = 'main'" title="Volver">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
@@ -42,9 +42,7 @@
           </svg>
         </button>
 
-        <div class="rastrear-badge">
-          Rastrear
-        </div>
+        <div class="rastrear-badge">Rastrear</div>
 
         <div class="routes-grid">
           <button 
@@ -61,7 +59,7 @@
         <button class="scroll-down-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"/>
-            <polyline points="19 12 12 19 5 12"/>
+            <polyline points="12 19 5 12 12 5"/>
           </svg>
         </button>
       </div>
@@ -84,11 +82,10 @@
       </div>
     </aside>
 
-    <!-- Área Principal -->
+    <!-- ÁREA PRINCIPAL -->
     <main class="main-content">
-      <!-- Topbar / Encabezado Superior -->
+      <!-- TOPBAR -->
       <header class="topbar">
-        <!-- Botón verde de regresar cuando se está en la vista de Chófer -->
         <div class="topbar-left">
           <button v-if="viewMode === 'chofer'" class="back-circle-btn green" @click="viewMode = 'main'" title="Volver al inicio">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
@@ -116,7 +113,8 @@
             </svg>
           </button>
 
-          <button class="icon-btn" title="Ajustes">
+          <!-- Botón Tornillo de Ajustes -->
+          <button class="icon-btn" title="Ajustes" @click="showSettings = true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
               <circle cx="12" cy="12" r="3"/>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -132,36 +130,115 @@
         </div>
       </header>
 
-      <!-- Breadcrumb Dinámico -->
+      <!-- BREADCRUMB -->
       <div class="breadcrumb">
         <span>Home</span>
         <span v-if="viewMode === 'rutas'"> &gt; Sus rutas</span>
         <span v-else-if="viewMode === 'chofer'"> &gt; Chófer</span>
       </div>
 
-      <!-- Contenedor del Mapa -->
+      <!-- MAPA -->
       <div class="map-wrapper">
-        <div id="map" class="real-map"></div>
+        <div id="company-map" class="real-map"></div>
       </div>
     </main>
+
+    <!-- OVERLAY (FONDO DE MÁSCARA) -->
+    <div v-if="showSettings || showLogoutModal" class="overlay" @click="closeAll"></div>
+
+    <!-- PANEL LATERAL DE CONFIGURACIÓN -->
+    <aside class="settings-drawer" :class="{ open: showSettings }">
+      <div class="settings-header">
+        <button class="back-arrow-btn" @click="showSettings = false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+        </button>
+        <div class="settings-title">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F4C5C" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <h2>Configuración</h2>
+        </div>
+      </div>
+
+      <div class="settings-body">
+        <ul class="settings-menu">
+          <li><span class="menu-icon">📍</span> Ubicación</li>
+          <li><span class="menu-icon">♿</span> Accesibilidad</li>
+          <li><span class="menu-icon">🔔</span> Control de notificaciones</li>
+          <li><span class="menu-icon">💬</span> Publicaciones</li>
+          <li><span class="menu-icon">❓</span> Ayuda y soporte</li>
+          <li><span class="menu-icon">💼</span> Empresa</li>
+          <li class="logout-item" @click="openLogoutModal">
+            <span class="menu-icon">🚪</span> Cerrar sesión
+          </li>
+        </ul>
+
+        <button class="scroll-down-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F4C5C" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MODAL DE CONFIRMACIÓN DE CIERRE DE SESIÓN -->
+    <div v-if="showLogoutModal" class="logout-modal-container">
+      <div class="logout-modal-card">
+        <h3>¿Estas seguro que desas salir?</h3>
+        
+        <div class="logout-actions">
+          <button class="btn-cancel" @click="showLogoutModal = false">Cancelar</button>
+          <button class="btn-confirm" @click="handleLogout">Cerrar sesión</button>
+        </div>
+
+        <button class="link-change-account" @click="handleLogout">Cambiar de cuenta</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+const router = useRouter()
+
 const searchQuery = ref('')
-const viewMode = ref('main') // 'main' | 'rutas' | 'chofer'
+const viewMode = ref('main')
 const selectedRoute = ref(null)
+
+// Estados para controlar los paneles
+const showSettings = ref(false)
+const showLogoutModal = ref(false)
 
 const selectRoute = (num) => {
   selectedRoute.value = num
 }
 
+const openLogoutModal = () => {
+  showSettings.value = false
+  showLogoutModal.value = true
+}
+
+const closeAll = () => {
+  showSettings.value = false
+  showLogoutModal.value = false
+}
+
+const handleLogout = () => {
+  showLogoutModal.value = false
+  router.push('/login')
+}
+
 onMounted(() => {
-  const map = L.map('map').setView([20.6314, -87.0728], 13)
+  const map = L.map('company-map').setView([20.6314, -87.0728], 13)
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -177,6 +254,7 @@ onMounted(() => {
 <style scoped>
 /* Layout Base */
 .company-layout {
+  position: relative;
   display: flex;
   width: 100vw;
   height: 100vh;
@@ -260,7 +338,7 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
-/* BOTÓN VOLVER (Compartido) */
+/* BOTÓN VOLVER */
 .back-circle-btn {
   width: 36px;
   height: 36px;
@@ -465,5 +543,196 @@ onMounted(() => {
 .real-map {
   width: 100%;
   height: 100%;
+}
+
+/* OVERLAY Y MODALES */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 998;
+}
+
+/* DRAWER CONFIGURACIÓN */
+.settings-drawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 380px;
+  height: 100vh;
+  background: linear-gradient(180deg, #14CBA8 0%, #10B394 100%);
+  z-index: 999;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.settings-drawer.open {
+  right: 0;
+}
+
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.back-arrow-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 0;
+}
+
+.settings-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: #0F4C5C;
+}
+
+.settings-title h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.settings-body {
+  background: #F8FAFC;
+  border-radius: 30px;
+  flex: 1;
+  padding: 1.8rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.settings-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.settings-menu li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 700;
+  color: #0F4C5C;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.settings-menu li:hover {
+  background: #E2E8F0;
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+}
+
+.scroll-down-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #F3D053;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* MODAL CERRAR SESIÓN */
+.logout-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.logout-modal-card {
+  background: white;
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 420px;
+  width: 90%;
+}
+
+.logout-modal-card h3 {
+  color: #0F4C5C;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  text-align: center;
+}
+
+.logout-actions {
+  display: flex;
+  gap: 1.2rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-cancel {
+  background: #14CBA8;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(20, 203, 168, 0.3);
+}
+
+.btn-confirm {
+  background: #2D4A58;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(45, 74, 88, 0.3);
+}
+
+.link-change-account {
+  background: none;
+  border: none;
+  color: #0F4C5C;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1rem;
 }
 </style>
