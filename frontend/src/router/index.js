@@ -3,10 +3,10 @@ import LandingView from '../views/landingview.vue'
 import LoginView from '../views/loginview.vue'
 import profileSelectView from '../views/profileselectview.vue'
 import RegisterView from '../views/registerview.vue'
-import DriverHomeView from '@/views/DriverHomeView.vue'
-import companyHomeview from '@/views/companyHomeview.vue'
-import manageRoutesView from '@/views/manageRoutesView.vue'
-import PassengerHomeView from '@/views/PassengerHomeView.vue'
+import DriverHomeView from '../views/home/DriverHomeView.vue'
+import companyHomeview from '../views/home/companyHomeview.vue'
+import manageRoutesView from '../views/manageRoutesView.vue'
+import PassengerHomeView from '../views/home/PassengerHomeView.vue'
 
 const routes = [
   {
@@ -30,13 +30,13 @@ const routes = [
     component: RegisterView,
   },
   {
-    path: '/driverhomeview',
-    name: 'driverhomeview',
+    path: '/driverhome',
+    name: 'driverhome',
     component: DriverHomeView
   },
   {
-     path: '/companyhomeview',
-    name: 'companyhomeview',
+     path: '/companyhome',
+    name: 'companyhome',
     component: companyHomeview,
     meta: { requiresAuth: true, role: 'empresa' }
   },
@@ -47,11 +47,14 @@ const routes = [
     meta: { requiresEmpresa: true } 
   },
   {
-    path: '/passengerhomeview',
-    name: 'passengerhomeview',
+    path: '/passengerhome',
+    name: 'passengerhome',
     component: PassengerHomeView,
     meta: { requiresAuth: true, role: 'pasajero' }
-  }
+  },
+  { path: '/profile',
+    name: 'profile', 
+    component: profileSelectView, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({

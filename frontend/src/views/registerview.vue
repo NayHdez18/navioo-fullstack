@@ -1,8 +1,9 @@
 <template>
   <div class="register-view">
+    <!-- Columna izquierda: formulario -->
     <div class="register-left">
-      <RouterLink to="/profile" class="back-btn" aria-label="Volver">
-        <ArrowLeft />
+      <RouterLink to="/" class="back-btn" aria-label="Volver">
+        <ArrowLeft :size="20" />
       </RouterLink>
 
       <div class="register-content">
@@ -11,45 +12,19 @@
           <span class="logo-subtitle">Workplace</span>
         </div>
 
-        <h1>Registro como {{ route.params.role }}</h1>
+        <h1>Crear una cuenta</h1>
 
         <form class="register-form" @submit.prevent="handleSubmit">
           <label>
-           Tipo de usuario
-            <select v-model="form.designation" class="select-input">
-              <option value="pasajero">Pasajero</option>
-              <option value="trabajador">Trabajador / Chófer</option>
-              <option value="empresa">Empresa</option>
-            </select>
+            Nombre de empresa
+            <input type="text" v-model="form.companyName" required />
           </label>
-
-          <label>
-            {{ form.designation === 'empresa' ? 'Nombre del Encargado' : 'Nombre' }}
-            <input type="text" v-model="form.name" required />
-          </label>
-          
-          <label v-if="form.designation !== 'empresa'">
-            Apellido
-            <input type="text" v-model="form.lastname" required />
-          </label>
-        
-          <label>
-            Teléfono
-            <input type="tel" v-model="form.phone" required />
-          </label>
-          
-
-          <template v-if="form.designation === 'trabajador' || form.designation === 'empresa'">
-            <label>
-              Nombre de la empresa
-              <input type="text" v-model="form.companyName" required />
-            </label>
 
           <label>
             RFC
             <input type="text" v-model="form.rfc" required />
           </label>
-          </template>
+
           <label>
             Correo electrónico
             <input type="email" v-model="form.email" required />
@@ -69,13 +44,13 @@
                 @click="showPassword = !showPassword"
                 :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
               >
-                 <Eye v-if="showPassword" :size="18" />
-                <EyeOff v-else :size="18" />
+                <EyeOff v-if="showPassword" :size="18" />
+                <Eye v-else :size="18" />
               </button>
             </div>
           </label>
 
-          <button type="submit" class="btn btn-accent">{{ loading ? 'Creando...' : 'Crear Cuenta' }}</button>
+          <button type="submit" class="btn btn-accent">Crear</button>
         </form>
 
         <p class="login-hint">
@@ -87,89 +62,42 @@
 
     <!-- Columna derecha: imagen -->
     <div class="register-right"></div>
-    <img src="../assets/images/2.jpg" alt="Imagen de registro" class="register-bg" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-<<<<<<< HEAD
-import { useRoute } from 'vue-router'
-const route = useRoute()
-console.log(route.params.role) // Muestra el valor del parámetro 'role' en la consola
-
-=======
-import axios from 'axios'
-import { useRouter } from 'vue-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
->>>>>>> 444dd6b0d8d804683fc3822015e4f33eb27363d6
 
-const router = useRouter()
 const showPassword = ref(false)
-const loading = ref(false)
 
 const form = ref({
-  designation: 'pasajero',
-  name: '',
-  lastname: '',
-  phone:'',
   companyName: '',
   rfc: '',
   email: '',
   password: '',
 })
 
-async function handleSubmit() {
+function handleSubmit() {
+  // Aquí luego conectamos con services/api.js (axios) para el registro real
   console.log('Formulario de registro:', form.value)
-  loading.value = true
-  try {
-     const response = await axios.post('http://localhost:5000/api/usuarios', form.value)
-    alert('¡Registro exitoso!')
-
-    setTimeout(() => {
-      router.push('/login')
-    }, 50)
-
-    
-  } catch (error) {
-    console.error('Error al registrar:', error)
-    alert(error.response?.data?.message || 'Error al conectar con el servidor')
-  } finally {
-    loading.value = false
-  }
 }
-
-
-
 </script>
 
 <style scoped>
 .register-view {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.register-right {
-  flex: 0 0 50%;
-  max-width: 50%;
-  background-image: url('../assets/images/register-bg.jpg');
-  background-size: cover;
-  background-position:center;
-
+  min-height: 100vh;
 }
 
 /* ---- Columna izquierda ---- */
 .register-left {
-  flex: 0 0 50%;
-  max-width: 50%;
-  box-sizing: border-box;
+  flex: 1;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  overflow-y: auto;
 }
 
 .back-btn {
@@ -186,12 +114,6 @@ async function handleSubmit() {
   justify-content: center;
   font-size: 1.2rem;
   box-shadow: var(--shadow-sm);
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;;
-}
-.back-btn:hover {
-  background: var(--color-accent);
-  color: var(--color-navy);
-  transform: scale(1.05);
 }
 
 .register-content {
@@ -200,14 +122,16 @@ async function handleSubmit() {
 }
 
 .logo-wrap {
-  text-align: center;
-  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .register-logo {
+  display: block;
   height: 70px;
+  width: auto;
 }
 
 .logo-subtitle {
@@ -274,7 +198,6 @@ h1 {
   color: var(--color-gray-text);
   display: flex;
   align-items: center;
-
 }
 
 .register-form .btn {
@@ -296,7 +219,7 @@ h1 {
 /* ---- Columna derecha ---- */
 .register-right {
   flex: 1;
-  background-image: url('../assets/images/register-bg.jpg');
+  background-image: url('../assets/images/2.jpg');
   background-size: cover;
   background-position: center;
 }
