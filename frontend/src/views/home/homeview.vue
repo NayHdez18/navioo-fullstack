@@ -5,7 +5,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import CompanyHomeView from './companyHomeview.vue'
+import CompanyHomeView from './company/companyHomeview.vue'
 // Aquí importarías PasajeroHomeView y DriverHomeView cuando los crees
 
 const userRole = ref(localStorage.getItem('user_role') || 'empresa')

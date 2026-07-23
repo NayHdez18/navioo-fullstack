@@ -2,9 +2,10 @@
   <div class="passenger-container">
     <!-- SIDEBAR / BARRA LATERAL -->
     <aside class="sidebar">
-      <div class="brand">
-        <img src="../assets/images/NAVIO.svg" alt="Navioo" class="logo" />
-      </div>
+        <div class="logo-wrap">
+          <img src="../assets/images/NAVIO.svg" alt="Navioo" class="register-logo" />
+          <span class="logo-subtitle">Workplace</span>
+        </div>
 
       <div class="user-avatar-card">
         <div class="avatar-placeholder">

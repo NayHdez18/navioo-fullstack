@@ -2,7 +2,7 @@
   <div class="register-view">
     <!-- Columna izquierda: formulario -->
     <div class="register-left">
-      <RouterLink to="/" class="back-btn" aria-label="Volver">
+      <RouterLink to="/profile" class="back-btn" aria-label="Volver">
         <ArrowLeft :size="20" />
       </RouterLink>
 
@@ -12,24 +12,43 @@
           <span class="logo-subtitle">Workplace</span>
         </div>
 
-        <h1>Crear una cuenta</h1>
+        <h1>Registro como {{ roleLabel }}</h1>
 
-        <form class="register-form" @submit.prevent="handleSubmit">
+         <form class="register-form" @submit.prevent="handleSubmit">
+          <!-- Empresa pide "nombre del encargado"; Trabajador/Pasajero piden "nombre" a secas -->
           <label>
-            Nombre de empresa
-            <input type="text" v-model="form.companyName" required />
+            {{ role === 'empresa' ? 'Nombre del encargado' : 'Nombre completo' }}
+            <input type="text" v-model="form.name" required />
           </label>
-
+ 
+          <label v-if="role !== 'empresa'">
+            Apellido
+            <input type="text" v-model="form.lastname" required />
+          </label>
+ 
           <label>
-            RFC
-            <input type="text" v-model="form.rfc" required />
+            Teléfono
+            <input type="tel" v-model="form.phone" required />
           </label>
-
+ 
+          <!-- Solo Empresa necesita estos dos campos -->
+          <template v-if="role === 'empresa'">
+            <label>
+              Nombre de empresa
+              <input type="text" v-model="form.companyName" required />
+            </label>
+ 
+            <label>
+              RFC
+              <input type="text" v-model="form.rfc" required />
+            </label>
+          </template>
+ 
           <label>
             Correo electrónico
             <input type="email" v-model="form.email" required />
           </label>
-
+ 
           <label>
             Contraseña
             <div class="password-wrap">
@@ -44,43 +63,77 @@
                 @click="showPassword = !showPassword"
                 :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
               >
-                <EyeOff v-if="showPassword" :size="18" />
-                <Eye v-else :size="18" />
+                <Eye v-if="showPassword" :size="18" />
+                <EyeOff v-else :size="18" />
               </button>
             </div>
           </label>
-
-          <button type="submit" class="btn btn-accent">Crear</button>
+ 
+          <button type="submit" class="btn btn-accent">
+            {{ loading ? 'Creando...' : 'Crear cuenta' }}
+          </button>
         </form>
-
+ 
         <p class="login-hint">
           ¿Ya tienes una cuenta?
           <RouterLink to="/login">Iniciar sesión aquí</RouterLink>
         </p>
       </div>
     </div>
-
-    <!-- Columna derecha: imagen -->
+ 
+    <!-- Columna derecha: imagen (solo CSS, sin <img> duplicado) -->
     <div class="register-right"></div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import axios from 'axios'
+import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
-
+ 
+const route = useRoute()
+const router = useRouter()
+ 
+// El rol viene de la URL (/register/:role), ya elegido en ProfileSelectView.
+// No se vuelve a preguntar aquí con un <select>.
+const role = route.params.role
+ 
+const roleLabel = computed(() => {
+  const labels = {
+    empresa: 'Empresa',
+    trabajador: 'Trabajador',
+    pasajero: 'Pasajero',
+  }
+  return labels[role] || role
+})
+ 
 const showPassword = ref(false)
-
+const loading = ref(false)
+ 
 const form = ref({
+  name: '',
+  lastname: '',
+  phone: '',
   companyName: '',
   rfc: '',
   email: '',
   password: '',
 })
-
-function handleSubmit() {
-  // Aquí luego conectamos con services/api.js (axios) para el registro real
-  console.log('Formulario de registro:', form.value)
+ 
+async function handleSubmit() {
+  loading.value = true
+  try {
+    const payload = { ...form.value, role }
+    await axios.post('http://localhost:5000/api/usuarios', payload)
+    alert('¡Registro exitoso!')
+    router.push('/login')
+  } catch (error) {
+    console.error('Error al registrar:', error)
+    alert(error.response?.data?.message || 'Error al conectar con el servidor')
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -230,4 +283,9 @@ h1 {
     display: none;
   }
 }
+
+.btn-accent :hover {
+  background-color: linear-gradient(135deg, var(--color-accent-dark), var(--color-accent-darker));
+}
+
 </style>

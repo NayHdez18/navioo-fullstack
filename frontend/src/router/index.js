@@ -4,9 +4,9 @@ import LoginView from '../views/loginview.vue'
 import profileSelectView from '../views/profileselectview.vue'
 import RegisterView from '../views/registerview.vue'
 import DriverHomeView from '../views/home/DriverHomeView.vue'
-import companyHomeview from '../views/home/companyHomeview.vue'
+import companyHomeview from '../views/home/company/companyHomeview.vue'
 import manageRoutesView from '../views/manageRoutesView.vue'
-import PassengerHomeView from '../views/home/PassengerHomeView.vue'
+import PassengerHomeView from '../views/home/pasaje/PassengerHomeView.vue'
 
 const routes = [
   {
