@@ -74,9 +74,9 @@ const form = ref({
 
  async function handleSubmit() {
   // Aquí luego conectamos con services/api.js (axios) para el login real
-  console.log('Formulario de login:', form.value)
-  router.push('/home')
-  const response = await axios.post('http:localhost:3000/api/usuarios/login', {
+  
+  try {
+    const response = await axios.post('http:localhost:3000/api/usuarios/login', {
     email: form.value.email,
     password: form.value.password
   });
@@ -84,6 +84,21 @@ const form = ref({
   console.log ('login exitoso:', response.data);
 
   localStorage.setItem('usuario', JSON.stringify(response.data));
+
+
+  router.push('/home');
+}catch (error){
+  console.error ('error al inicar sesion:' ,error);
+  if (error.response && error.response.data && error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = 'No se pudo conectar con el servidor. Inténtalo más tarde.';
+    }
+  } finally {
+    loading.value = false
+
+} 
+
 }
 </script>
 
