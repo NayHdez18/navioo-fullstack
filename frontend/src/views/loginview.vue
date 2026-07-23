@@ -67,10 +67,14 @@ const form = ref({
   password: '',
 })
 
-function handleSubmit() {
   // Aquí luego conectamos con services/api.js (axios) para el login real
-  console.log('Formulario de login:', form.value)
+  async function handleSubmit() {
+  const datos = await login(form.value)  // 👈 "await" solo funciona dentro de una función async
+  router.push({ name: `home-${datos.user.role}` })
 }
+  console.log('Formulario de login:', form.value)
+
+  
 </script>
 
 <style scoped>
