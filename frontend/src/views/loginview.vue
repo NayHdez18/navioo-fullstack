@@ -57,20 +57,62 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
 
+const router = useRouter()
 const showPassword = ref(false)
+const loading = ref(false)
+const errorMessage =ref('')
 
 const form = ref({
   email: '',
   password: '',
 })
 
+<<<<<<< HEAD
   // Aquí luego conectamos con services/api.js (axios) para el login real
   async function handleSubmit() {
   const datos = await login(form.value)  // 👈 "await" solo funciona dentro de una función async
   router.push({ name: `home-${datos.user.role}` })
+=======
+ async function handleSubmit() {
+  loading.value=true
+  try {
+    const response = await axios.post('http://localhost:5000/api/usuarios/login', {
+    email: form.value.email,
+    password: form.value.password
+  });
+
+  console.log ('login exitoso:', response.data);
+
+  localStorage.setItem('usuario', JSON.stringify(response.data));
+
+  const rolusuario = response.data.designation;
+  if (rolusuario === 'empresa') {
+      router.push('/companyhomeview'); 
+    } else if (rolusuario === 'trabajador') {
+      router.push('/driverhomeview');
+    } else if (rolusuario==='pasajero'){
+      router.push('/passengerhomeview');
+    }else {
+      router.push('/home');
+    }
+}catch (error){
+  console.error ('error al inicar sesion:' ,error);
+  if (error.response && error.response.data && error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = 'No se pudo conectar con el servidor. Inténtalo más tarde.';
+    }
+  } finally {
+    loading.value = false
+
+} 
+
+>>>>>>> 444dd6b0d8d804683fc3822015e4f33eb27363d6
 }
   console.log('Formulario de login:', form.value)
 

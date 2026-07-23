@@ -15,15 +15,41 @@
 
         <form class="register-form" @submit.prevent="handleSubmit">
           <label>
-            Nombre de empresa
-            <input type="text" v-model="form.companyName" required />
+           Tipo de usuario
+            <select v-model="form.designation" class="select-input">
+              <option value="pasajero">Pasajero</option>
+              <option value="trabajador">Trabajador / Chófer</option>
+              <option value="empresa">Empresa</option>
+            </select>
           </label>
+
+          <label>
+            {{ form.designation === 'empresa' ? 'Nombre del Encargado' : 'Nombre' }}
+            <input type="text" v-model="form.name" required />
+          </label>
+          
+          <label v-if="form.designation !== 'empresa'">
+            Apellido
+            <input type="text" v-model="form.lastname" required />
+          </label>
+        
+          <label>
+            Teléfono
+            <input type="tel" v-model="form.phone" required />
+          </label>
+          
+
+          <template v-if="form.designation === 'trabajador' || form.designation === 'empresa'">
+            <label>
+              Nombre de la empresa
+              <input type="text" v-model="form.companyName" required />
+            </label>
 
           <label>
             RFC
             <input type="text" v-model="form.rfc" required />
           </label>
-
+          </template>
           <label>
             Correo electrónico
             <input type="email" v-model="form.email" required />
@@ -49,7 +75,7 @@
             </div>
           </label>
 
-          <button type="submit" class="btn btn-accent">Crear</button>
+          <button type="submit" class="btn btn-accent">{{ loading ? 'Creando...' : 'Crear Cuenta' }}</button>
         </form>
 
         <p class="login-hint">
@@ -67,26 +93,53 @@
 
 <script setup>
 import { ref } from 'vue'
+<<<<<<< HEAD
 import { useRoute } from 'vue-router'
 const route = useRoute()
 console.log(route.params.role) // Muestra el valor del parámetro 'role' en la consola
 
+=======
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
+>>>>>>> 444dd6b0d8d804683fc3822015e4f33eb27363d6
 
+const router = useRouter()
 const showPassword = ref(false)
+const loading = ref(false)
 
 const form = ref({
+  designation: 'pasajero',
+  name: '',
+  lastname: '',
+  phone:'',
   companyName: '',
   rfc: '',
   email: '',
   password: '',
 })
 
-function handleSubmit() {
-  // Aquí luego conectamos con services/api.js (axios) para el registro real
+async function handleSubmit() {
   console.log('Formulario de registro:', form.value)
+  loading.value = true
+  try {
+     const response = await axios.post('http://localhost:5000/api/usuarios', form.value)
+    alert('¡Registro exitoso!')
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 50)
+
+    
+  } catch (error) {
+    console.error('Error al registrar:', error)
+    alert(error.response?.data?.message || 'Error al conectar con el servidor')
+  } finally {
+    loading.value = false
+  }
 }
 
-import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
+
 
 </script>
 

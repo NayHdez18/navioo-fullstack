@@ -1,18 +1,18 @@
 <template>
-  <div class="home-view">
-    <!-- PLACEHOLDER: home de la app, pendiente de diseño -->
-    <p>Home view — pendiente de construir</p>
-  </div>
+  <!-- Renderiza la vista que corresponda al usuario -->
+  <component :is="currentHomeView" />
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, computed } from 'vue'
+import CompanyHomeView from './companyHomeview.vue'
+// Aquí importarías PasajeroHomeView y DriverHomeView cuando los crees
 
-<style scoped>
-.home-view {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-navy);
-}
-</style>
+const userRole = ref(localStorage.getItem('user_role') || 'empresa')
+
+const currentHomeView = computed(() => {
+  if (userRole.value === 'empresa') return CompanyHomeView
+  // return DriverHomeView, etc.
+  return CompanyHomeView
+})
+</script>
