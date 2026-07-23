@@ -89,7 +89,9 @@ const form = ref({
       router.push('/companyhomeview'); 
     } else if (rolusuario === 'trabajador') {
       router.push('/driverhomeview');
-    } else {
+    } else if (rolusuario==='pasajero'){
+      router.push('/passengerhomeview');
+    }else {
       router.push('/home');
     }
 }catch (error){

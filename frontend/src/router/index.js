@@ -5,6 +5,8 @@ import HomeView from '../views/homeview.vue'
 import RegisterView from '../views/registerview.vue'
 import DriverHomeView from '@/views/DriverHomeView.vue'
 import companyHomeview from '@/views/companyHomeview.vue'
+import manageRoutesView from '@/views/manageRoutesView.vue'
+import PassengerHomeView from '@/views/PassengerHomeView.vue'
 
 const routes = [
   {
@@ -36,7 +38,20 @@ const routes = [
   {
      path: '/companyhomeview',
     name: 'companyhomeview',
-    component: companyHomeview
+    component: companyHomeview,
+    meta: { requiresAuth: true, role: 'empresa' }
+  },
+  {
+    path: '/gestionar-rutas',
+    name: 'ManageRoutes',
+    component: manageRoutesView,
+    meta: { requiresEmpresa: true } 
+  },
+  {
+    path: '/passengerhomeview',
+    name: 'passengerhomeview',
+    component: PassengerHomeView,
+    meta: { requiresAuth: true, role: 'pasajero' }
   }
 ]
 
@@ -56,6 +71,11 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-})
+  if (to.meta.role && usuario?.designation !== to.meta.role) {
+    // Redirigir a su pantalla correspondiente si intenta acceder a otra
+    if (usuario?.designation === 'empresa') return next('/companyhomeview');
+    if (usuario?.designation === 'pasajero') return next('/passengerhomeview');
+    return next('/login');}
+});
 
 export default router
