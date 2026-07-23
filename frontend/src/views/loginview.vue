@@ -87,7 +87,7 @@ const form = ref({
   const rolusuario = response.data.designation;
   if (rolusuario === 'empresa') {
       router.push('/companyhomeview'); 
-    } else if (userRole === 'trabajador') {
+    } else if (rolusuario === 'trabajador') {
       router.push('/driverhomeview');
     } else {
       router.push('/home');
