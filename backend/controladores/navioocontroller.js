@@ -1,4 +1,5 @@
 const Usuario = require ('../models/usuarios');
+const Empresa = require('../models/empresa');
 const Ruta = require ('../models/rutasviaje');
 const asyncHandler = require('express-async-handler');
 
@@ -10,24 +11,49 @@ const getUsuarios = asyncHandler(async(req, res) =>{
     res.status(200).json(usuarios);
 });
 const getRutas = asyncHandler(async(req, res) =>{
-    const rutas = await Ruta.find();
+    const rutas = await Ruta.find().populate('driver','name lastname phone email designation');
     res.status(200).json(rutas);
 });
-{}
+
 const crearusuario = asyncHandler (async(req, res) =>{
 
     const {name, lastname, phone, email, password, designation}=req.body;
     if(!name|| !lastname || !phone || !email || !password || !designation){
         throw new Error ("Todos los campos ser rellenados ")
     }
+  if ((designation === 'trabajador' || designation ==='empresa') && (!rfc || !companyName)) {
+    res.status(400);
+    throw new Error("El RFC y el nombre de la empresa es obligatorio para el perfil de trabajador.");
+  }
+  const usuarioExiste = await Usuario.findOne({ email });
+  if (usuarioExiste) {
+    res.status(400);
+    throw new Error("El correo ya está registrado.");
+  }
     const usuario=await Usuario.create ({
-        name, lastname, phone, email, password, designation
+        name,
+         lastname: designation === 'empresa' ? (lastname || 'representante:') : lastname,
+          phone, 
+          email, 
+          password, 
+          designation, 
+          rfc: (designation === 'trabajador' || designation ==='empresa') ? rfc : undefined,
+          companyName: (designation === 'trabajador' || designation === 'empresa') ? companyName : undefined
+
     });
+
+    if (designation === 'empresa') {
+        await Empresa.create({
+            companyName,
+            rfc,
+            usuarioAdmin: usuario._id
+        });
+    }
     res.status(201).json({usuario})
 });
 
 const getUsuario = asyncHandler(async(req, res) =>{
-    const usuario = await Usuario.FindById(req.params.id);
+    const usuario = await Usuario.findById(req.params.id);
     if(usuario){
         res.status(404);
         throw new Error ("usuario no encontrado")
@@ -36,7 +62,7 @@ const getUsuario = asyncHandler(async(req, res) =>{
 });
 
 const uptdateusuario = asyncHandler(async(req, res) =>{
-    const usuario = await Usuario.FindById(req.params.id);
+    const usuario = await Usuario.findById(req.params.id);
     if(!usuario){
         res.status(404);
         throw new Error ("usuario no encontrado")
@@ -59,18 +85,45 @@ const deleteusuario = asyncHandler(async(req, res) =>{
     res.status(200).json({message: `Eliminar usuario de: ${req.params.id}`});
 });
 
+const loginusuario = asyncHandler(async(req, res) => {
+    const {email, password} = req.body;
 
+    if(!email || !password) {
+        res.status(400);
+        throw new Error ('por favor, ingrese los datos')
+    }
+    const usuario = await Usuario.findOne({email});
+
+    if (usuario && usuario.password === password) {
+    res.status(200).json({
+      _id: usuario._id,
+      name: usuario.name,
+      lastname: usuario.lastname,
+      email: usuario.email,
+      designation: usuario.designation,
+      companyName: usuario.companyName,
+      rfc: usuario.rfc
+    });
+  } else {
+    res.status(401);
+    throw new Error('Credenciales inválidas (email o contraseña incorrectos)');
+  }
+})
 // +++++++++++++++++CONTROLADORES DE RUTAS +++++++++++++++++++++++++++++++++
 
 
 const crearRuta = asyncHandler (async(req, res) =>{
-
-    const {nameroute, driver, status}=req.body;
-    if(!nameroute || !driver || !status){
-        throw new Error ("Todos los campos ser rellenados ")
+    
+    const {name, driverid, status}=req.body;
+    const drivernew = await Usuario.findById(driverid)
+    if (!drivernew || drivernew.designation !=='trabajador'){
+        res.status(400);
+        throw new error ('Usuario no encontrado')
     }
     const ruta=await Ruta.create ({
-        nameroute, driver, status
+        nameroute:name,
+        driver:driverid,
+        status: status
     });
     res.status(201).json({ruta})
 });
@@ -110,4 +163,4 @@ const deleteruta = asyncHandler(async(req, res) =>{
 
 
 
-module.exports = { crearRuta, crearusuario, getRuta, getRutas, getUsuario, getUsuarios, deleteruta, deleteusuario, uptdateruta, uptdateusuario }
+module.exports = { crearRuta, crearusuario, getRuta, getRutas, getUsuario, getUsuarios, deleteruta, deleteusuario, uptdateruta, uptdateusuario, loginusuario }
