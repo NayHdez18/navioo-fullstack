@@ -57,22 +57,33 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
 
 const router = useRouter()
 const showPassword = ref(false)
+const loading = ref(false)
+const errorMessage =ref('')
 
 const form = ref({
   email: '',
   password: '',
 })
 
-function handleSubmit() {
+ async function handleSubmit() {
   // Aquí luego conectamos con services/api.js (axios) para el login real
   console.log('Formulario de login:', form.value)
   router.push('/home')
+  const response = await axios.post('http:localhost:3000/api/usuarios/login', {
+    email: form.value.email,
+    password: form.value.password
+  });
+
+  console.log ('login exitoso:', response.data);
+
+  localStorage.setItem('usuario', JSON.stringify(response.data));
 }
 </script>
 
