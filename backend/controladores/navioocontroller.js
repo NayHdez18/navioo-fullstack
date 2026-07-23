@@ -17,10 +17,16 @@ const getRutas = asyncHandler(async(req, res) =>{
 
 const crearusuario = asyncHandler (async(req, res) =>{
 
-    const {name, lastname, phone, email, password, designation}=req.body;
-    if(!name|| !lastname || !phone || !email || !password || !designation){
+    const {name, lastname, phone, email, password, designation, rfc, companyName}=req.body;
+    if(!name|| !phone || !email || !password || !designation){
         throw new Error ("Todos los campos ser rellenados ")
     }
+
+    if (designation !== 'empresa' && !lastname) {
+        res.status(400);
+        throw new Error("El apellido es obligatorio.");
+    }
+
   if ((designation === 'trabajador' || designation ==='empresa') && (!rfc || !companyName)) {
     res.status(400);
     throw new Error("El RFC y el nombre de la empresa es obligatorio para el perfil de trabajador.");
@@ -130,7 +136,7 @@ const crearRuta = asyncHandler (async(req, res) =>{
 
 const getRuta = asyncHandler(async(req, res) =>{
     const ruta = await Ruta.FindById(req.params.id);
-    if(ruta){
+    if(!ruta){
         res.status(404);
         throw new Error ("Ruta no encontrada")
     }
