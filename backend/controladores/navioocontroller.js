@@ -120,22 +120,31 @@ const loginusuario = asyncHandler(async(req, res) => {
 
 const crearRuta = asyncHandler (async(req, res) =>{
     
-    const {name, driverid, status}=req.body;
+    const {name, code, color, driverid, status, startName, startCoords, endName, endCoords}=req.body;
     const drivernew = await Usuario.findById(driverid)
-    if (!drivernew || drivernew.designation !=='trabajador'){
-        res.status(400);
-        throw new error ('Usuario no encontrado')
-    }
+   let driver = null;
+    if (driverid) {
+        driver = await Usuario.findById(driverid);
+        if (!driver || driver.designation !== 'trabajador') {
+            res.status(400);
+            throw new Error('Conductor no encontrado o no autorizado');
+        }}
     const ruta=await Ruta.create ({
         nameroute:name,
-        driver:driverid,
-        status: status
+        code,
+        color,
+        driver:driverid || null,
+        status: status !== undefined ? status : true,
+       startName: startName || "Origen",
+        startCoords: startCoords || [20.6314, -87.0728],
+        endName: endName || "Destino",
+        endCoords: endCoords || [20.6480, -87.0865]
     });
     res.status(201).json({ruta})
 });
 
 const getRuta = asyncHandler(async(req, res) =>{
-    const ruta = await Ruta.FindById(req.params.id);
+    const ruta = await Ruta.findById(req.params.id).populate('drive', 'name lastname phone email designation');
     if(!ruta){
         res.status(404);
         throw new Error ("Ruta no encontrada")
@@ -144,17 +153,40 @@ const getRuta = asyncHandler(async(req, res) =>{
 });
 
 const uptdateruta = asyncHandler(async(req, res) =>{
-    const ruta = await Ruta.FindById(req.params.id);
+    const { name, nameroute, code, color, driverid, driver, startName, endName, startCoords, endCoords } = req.body;
+    const ruta = await Ruta.findById(req.params.id);
     if(!ruta){
         res.status(404);
         throw new Error ("Ruta no encontrada")
     }
+    const selectorDriverId = driverid !== undefined ? driverid : driver; 
+        const cleanDriverId = (selectedDriverId && selectedDriverId !== "" && selectedDriverId !== "null") 
+        ? selectedDriverId 
+        : null;
+
+    // Si se envió un chófer, validar que exista y tenga el rol de 'trabajador'
+    if (cleanDriverId) {
+        const usuarioDriver = await Usuario.findById(cleanDriverId);
+        if (!usuarioDriver || usuarioDriver.designation !== 'trabajador') {
+            res.status(400);
+            throw new Error('El usuario asignado no es un chófer válido.');
+        }
+    const updateData = {
+        nameroute: name || nameroute || ruta.nameroute,
+        code: code || ruta.code,
+        color: color || ruta.color,
+        driver: cleanDriverId,
+        startName: startName || ruta.startName,
+        endName: endName || ruta.endName,
+        startCoords: startCoords || ruta.startCoords,
+        endCoords: endCoords || ruta.endCoords
+    }
     const updatedruta = await Ruta.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        updatedData,
         {new: true}
-    )
-    res.status(200).json(updatedruta);
+    ).populate('driver', 'name lastname phone email designation')
+    res.status(200).json(updatedruta);}
 });
 const deleteruta = asyncHandler(async(req, res) =>{
     const ruta = await Ruta.findById(req.params.id);

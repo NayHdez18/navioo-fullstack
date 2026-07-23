@@ -7,7 +7,8 @@ const usuarioSchema = new mongoose.Schema({
     },
     lastname:{
         type: String,
-        required: [true, "Please add the user's lastname"]
+        required: [function() { return this.designation !== 'empresa'; },
+        "El apellido es obligatorio"]
     },
     phone:{
         type: String,
