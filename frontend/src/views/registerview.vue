@@ -118,7 +118,12 @@ async function handleSubmit() {
   try {
      const response = await axios.post('http://localhost:5000/api/usuarios', form.value)
     alert('¡Registro exitoso!')
-    router.push('/login')
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 50)
+
+    
   } catch (error) {
     console.error('Error al registrar:', error)
     alert(error.response?.data?.message || 'Error al conectar con el servidor')
