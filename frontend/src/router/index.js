@@ -3,18 +3,10 @@ import LandingView from '../views/landingview.vue'
 import LoginView from '../views/loginview.vue'
 import profileSelectView from '../views/profileselectview.vue'
 import RegisterView from '../views/registerview.vue'
-<<<<<<< HEAD
-import EmpresaHome from '../views/home/empresahome.vue'
-import TrabajadorHome from '../views/home/trabajadorhome.vue'
-import PasajeroHome from '../views/home/pasajerohome.vue'
-
-
-=======
 import DriverHomeView from '@/views/DriverHomeView.vue'
 import companyHomeview from '@/views/companyHomeview.vue'
 import manageRoutesView from '@/views/manageRoutesView.vue'
 import PassengerHomeView from '@/views/PassengerHomeView.vue'
->>>>>>> 444dd6b0d8d804683fc3822015e4f33eb27363d6
 
 const routes = [
   {
@@ -33,22 +25,6 @@ const routes = [
     component: RegisterView,
   },
   {
-<<<<<<< HEAD
-    path: '/profile',
-    name: 'profile',
-    component: profileSelectView,
-  },
-{
-  path: '/home',
-  redirect: () => {
-    const userRole = null // placeholder, luego viene del store de auth
-    if (userRole === 'empresa') return { name: 'home-empresa' }
-    if (userRole === 'trabajador') return { name: 'home-trabajador' }
-    if (userRole === 'pasajero') return { name: 'home-pasajero' }
-    return { name: 'login' } // si no hay rol reconocido, a loguearse
-  },
-},
-=======
     path: '/registerview',
     name: 'registerview',
     component: RegisterView,
@@ -76,7 +52,6 @@ const routes = [
     component: PassengerHomeView,
     meta: { requiresAuth: true, role: 'pasajero' }
   }
->>>>>>> 444dd6b0d8d804683fc3822015e4f33eb27363d6
 ]
 
 const router = createRouter({

@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "vue": "^3.5.39"
+    "bootstrap": "^5.3.8",
+    "vue": "^3.5.39",
+    "vue-router": "^4.0.13"
   }
 }
