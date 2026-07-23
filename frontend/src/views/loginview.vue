@@ -73,10 +73,9 @@ const form = ref({
 })
 
  async function handleSubmit() {
-  // Aquí luego conectamos con services/api.js (axios) para el login real
-  
+  loading.value=true
   try {
-    const response = await axios.post('http:localhost:3000/api/usuarios/login', {
+    const response = await axios.post('http://localhost:5000/api/usuarios/login', {
     email: form.value.email,
     password: form.value.password
   });
@@ -85,8 +84,14 @@ const form = ref({
 
   localStorage.setItem('usuario', JSON.stringify(response.data));
 
-
-  router.push('/home');
+  const rolusuario = response.data.designation;
+  if (rolusuario === 'empresa') {
+      router.push('/companyhomeview'); 
+    } else if (userRole === 'trabajador') {
+      router.push('/driverhomeview');
+    } else {
+      router.push('/home');
+    }
 }catch (error){
   console.error ('error al inicar sesion:' ,error);
   if (error.response && error.response.data && error.response.data.message) {
